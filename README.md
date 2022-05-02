@@ -1,6 +1,6 @@
-# About {{ Name }}
+# About assets-github-actions-dotnet-sonarcloud
 
-ERNI Academy StarterKit, PoC, or Gidelines. This is an about description of your repository.
+Is a github composite action to run a sonarcloud analysis for dotnet projects
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -9,44 +9,52 @@ ERNI Academy StarterKit, PoC, or Gidelines. This is an about description of your
 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-- [Tools A](https://example.com)
-- [Framework B](https://example.com)
-- [Project C](https://example.com)
+- [Composite action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action)
 
 ## Features
 
-- Be awesome
-- Make things faster
+- sonarcloud analysis for dotnet projects
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+Check the releases of https://github.com/ERNI-Academy/assets-github-actions-dotnet-sonarcloud/releases
+Find the lastest tag or one of the previus versions e.g. "v1"
+Then your able to use it in your workflows
+
+Please take a look at https://docs.github.com/en/actions/creating-actions/creating-a-composite-action to see how composite actions works.
 
 ## Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+You would need to have a Sonarcloud Token and the Sonarcloud Project Key. You will have this two values when you configure your repository in sonarcloud.
+Follow this link https://sonarcloud.io/github to see how to integrate sonarcloud with github.
+
+Remember that Sonarcloud Token is sensitive and should be keeped as a secret. 
 
 ## Installation
 
-Installation instructions {{ Name }} by running:
+In the workflow of your target dotnet repository do this:
 
-1. Clone the repo
+1. Your workflow:
 
-   ```sh
-   git clone https://github.com/ERNI-Academy/Project-Name.git
-   ```
+```yml
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
 
-2. Install packages
+ #maybe other steps of your desire
 
-    ```sh
-    npm install
-    ```
 
-3. Configure
-
-    ```JS
-    const API_KEY = 'ENTER YOUR API';
-    ```
+     # insert this in order to have sonarcloud analysis:
+     - id: sonarcloud
+       uses: ERNI-Academy/assets-github-actions-dotnet-sonarcloud@v1  # this is name of the action plus the version "v1" find the lastest tag in the releases
+       with:
+         sonar_project_key: '[your sonar project key]'  # your project key
+         sonar_token: '[your sonar token]'              #your sonarcloud token, we recommend that to storage the token in a secret and use it like ${{ secrets.SONAR_TOKEN }}         
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Contributing
 
@@ -56,7 +64,7 @@ Please see our [Contribution Guide](CONTRIBUTING.md) to learn how to contribute.
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-(LICENSE) © {{Year}} [ERNI - Swiss Software Engineering](https://www.betterask.erni)
+(LICENSE) © 2022 [ERNI - Swiss Software Engineering](https://www.betterask.erni)
 
 ## Code of conduct
 
